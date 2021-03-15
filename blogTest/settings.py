@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'cqcgtq0*2v0aax%s)g-an(oi)flrlq!33pv+wpgo2*3hwyh010'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -71,10 +69,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blogTest.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# mysql的配置
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
@@ -82,18 +80,33 @@ DATABASES = {
 
         "ENGINE": 'django.db.backends.mysql',
         "NAME": "blogtest",
-        'HOST':'121.199.23.213',
-        'USER':'blogTest',
-        'PASSWORD':'123456',
-        'PORT':3306
-
-
-
-
-
+        'HOST': '121.199.23.213',
+        'USER': 'blogTest',
+        'PASSWORD': '123456',
+        'PORT': 3306
     }
 }
 
+# redis的配置(缓存的使用)
+CACHES = {
+    'default': {  # 默认
+        "BACKEND": 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.16379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+    'session': {  # session
+        "BACKEND": 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.16379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+# session由数据库存储改为redis存储
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALLAS = 'session'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -113,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -127,8 +139,61 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# 配置静态文件根目录
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
+
+
+# 日志
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
+    'formatters': {  # 日志信息显示格式
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(lineno)s %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(module)s %(lineno)s %(message)s'
+        },
+    },
+    'filters': {  # 对日志进行过滤
+
+        'require_debug_true': {  # django在debug模式下猜输出日志
+            '()': 'django.utils.log.RequireDebugTrue',
+
+        },
+    },
+    'handlers': {  # 日志的处理方式
+        'console': {  # 向终端中输出日志
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+
+        },
+        'file': {  # 向文件中输出日志
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/blog.log'),  # 日志文件的位置(需要在项目目录中建立一个logs目录)
+            'maxBytes': 300 * 1024 * 1024,
+            'backupCount': 10,
+            'formatter': 'verbose'
+        },
+
+    },
+    'loggers': {  # 日志器
+        'djangoLog': {  # 定义了一个名为djangoLog的日志器
+
+            'handlers': ['console', 'file'],  # 可以同时向终端和文件中输出日志
+            'propagate': True,  # 是否继续传递日志信息
+            'level': 'INFO'  # 日志器接受的最低级别的日志
+
+        }
+    }
+
+}

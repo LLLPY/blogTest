@@ -1,0 +1,20 @@
+INFO 2021-03-15 14:57:53,050 autoreload 613 Watching for file changes with StatReloader
+WARNING 2021-03-15 14:57:55,371 log 224 Not Found: /
+WARNING 2021-03-15 14:57:55,373 basehttp 157 "GET / HTTP/1.1" 404 2027
+WARNING 2021-03-15 14:57:55,587 log 224 Not Found: /favicon.ico
+WARNING 2021-03-15 14:57:55,589 basehttp 157 "GET /favicon.ico HTTP/1.1" 404 2078
+INFO 2021-03-15 14:58:01,201 basehttp 157 "GET /app/hello/ HTTP/1.1" 200 12
+INFO 2021-03-15 14:59:29,177 autoreload 236 C:\Users\LLL\Desktop\python\python基础(演练)\Web开发编程\后端学习\Django学习\blogTest\blogTest\urls.py changed, reloading.
+INFO 2021-03-15 14:59:29,896 autoreload 613 Watching for file changes with StatReloader
+INFO 2021-03-15 14:59:31,934 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:44,030 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:44,701 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:45,117 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:45,299 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:45,462 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:50,807 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 14:59:53,463 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 15:00:25,374 basehttp 157 "GET / HTTP/1.1" 200 4
+INFO 2021-03-15 15:01:01,026 autoreload 236 C:\Users\LLL\Desktop\python\python基础(演练)\Web开发编程\后端学习\Django学习\blogTest\blogTest\settings.py changed, reloading.
+INFO 2021-03-15 15:03:09,837 urls 34 危险!!!
+INFO 2021-03-15 15:04:46,087 urls 34 危险!!!
