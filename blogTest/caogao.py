@@ -1,0 +1,2 @@
+import  tinymce
+print(tinymce)

@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+</head>
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="icon" href="{% static 'imgs/favorite.ico' %}">
+<link rel="stylesheet" href="{% static 'fonts/glyphicons-halflings-regular.eot' %}">
+<link rel="stylesheet" href="{% static 'fonts/glyphicons-halflings-regular.svg' %}">
+<link rel="stylesheet" href="{% static 'fonts/glyphicons-halflings-regular.ttf' %}">
+<link rel="stylesheet" href="{% static 'fonts/glyphicons-halflings-regular.woff' %}">
+<link rel="stylesheet" href="{% static 'fonts/glyphicons-halflings-regular.woff2' %}">
+
+{% comment %}引入字体{% endcomment %}
+<link rel="stylesheet" href="{% static 'fonts/iconfont/iconfont.css' %}">
+<link rel="stylesheet" href="{% static 'css/font.css' %}">
+<script src="{% static 'fonts/iconfont/iconfont.js' %}"></script>
+<script src="{% static 'js/tools.js' %}"></script>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+
+    }
+
+    #photoDisplay {
+        width: 100%;
+        height: 500px;
+        background-color: deepskyblue;
+
+    }
+
+    #photoDisplay-le, #photoDisplay-ri {
+        height: 100%;
+        width: 50%;
+        float: right;
+    }
+
+    #photoDisplay-le {
+        position: relative;
+        width: 40%;
+        float: left;
+        background: url("{% static 'imgs/stage.webp' %}");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        border: 1px solid black;
+
+    }
+
+    #photoBox{
+        position: absolute;
+        left: 134px;
+        bottom:10px;
+
+
+    }
+
+
+</style>
+
+
+<body>
+<div class="container">
+
+    {% include 'head.html' %}
+
+    {% comment %}    <div id="head">
+
+        <form action="{% url 'home:home' %}" method="post" enctype="multipart/form-data">
+            <input type="file" name="imgfile">
+            <button>提交</button>
+        </form>
+
+    </div>{% endcomment %}
+
+    <div id="photoDisplay">
+        <div id="photoDisplay-le">
+            <div id="photoBox">
+                <div class="photo">
+                    <div class="cube">
+                        <div class="small top1"></div>
+                        <div class="big top2"></div>
+                        <div class="small bottom1"></div>
+                        <div class="big bottom2"></div>
+                        <div class="small left1"></div>
+                        <div class="big left2"></div>
+                        <div class="small right1"></div>
+                        <div class="big right2"></div>
+                        <div class="small front1"></div>
+                        <div class="big front2"></div>
+                        <div class="small rear1"></div>
+                        <div class="big rear2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="photoDisplay-ri"></div>
+
+
+    {% comment %}版权{% endcomment %}
+    {% include 'footer.html' %}
+
+<p draggable="true" style="position:absolute;width:100px;height:100px;background-color:red;">123</p>
+
+
+</body>
+</html>
+
+
+ <style>
+
+        .big {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.6;
+        }
+
+        .small {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .photo {
+            width: 200px;
+            height: 200px;
+            margin: 200px auto;
+            perspective: 800px;
+
+        }
+
+        .cube {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transition: all 1s;
+        }
+
+        .cube {
+            animation: run 10s linear infinite;
+        }
+
+        @keyframes run {
+            from {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+
+            to {
+                transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+            }
+        }
+
+        /* 外面的样式 */
+        .top2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            transform: rotateX(90deg) translateZ(120px);
+        }
+
+        .bottom2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            transform: rotateX(-90deg) translateZ(120px);
+        }
+
+        .left2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            transform: rotateY(90deg) translateZ(120px);
+        }
+
+        .right2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            transform: rotateY(-90deg) translateZ(120px);
+        }
+
+        .front2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            z-index: 1;
+            transform: translateZ(120px);
+        }
+
+        .rear2 {
+            background: url({% static 'imgs/register.jpg' %});
+            background-size: 100% 100%;
+            transform: translateZ(-120px);
+        }
+
+        /* 里面的样式 */
+        .top1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            transform: rotateX(90deg) translateZ(50px);
+        }
+
+        .bottom1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            transform: rotateX(-90deg) translateZ(50px);
+        }
+
+        .left1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            transform: rotateY(90deg) translateZ(50px);
+        }
+
+        .right1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            transform: rotateY(-90deg) translateZ(50px);
+        }
+
+        .front1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            z-index: 1;
+            transform: translateZ(50px);
+        }
+
+        .rear1 {
+            background: url("{% static 'imgs/test.jpg' %}");
+            background-size: 100% 100%;
+            transform: translateZ(-50px);
+        }
+
+        .cube:hover {
+            animation-play-state: paused;
+        }
+
+        .cube:hover .top2 {
+            transform: rotateX(90deg) translateZ(200px);
+        }
+
+        .cube:hover .bottom2 {
+            transform: rotateX(-90deg) translateZ(200px);
+        }
+
+        .cube:hover .left2 {
+            transform: rotateY(90deg) translateZ(200px);
+        }
+
+        .cube:hover .right2 {
+            transform: rotateY(-90deg) translateZ(200px);
+        }
+
+        .cube:hover .front2 {
+            transform: translateZ(200px);
+        }
+
+        .cube:hover .rear2 {
+            transform: translateZ(-200px);
+        }
+
+
+    </style>

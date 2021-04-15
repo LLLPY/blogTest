@@ -1,0 +1,260 @@
+{% comment %}加载静态文件{% endcomment %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>register</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <style>
+        body {
+            background-color: rgba(78, 115, 223, 0.8);
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            border: 1px solid black;
+            width: 800px;
+            padding: 0;
+            margin: 50px auto;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #con {
+            width: 800px;
+            height: 600px;
+        }
+
+        #con-le, #con-ri {
+            width: 400px;
+            height: 600px;
+            float: left;
+        }
+
+        #con-le {
+            background: url('{% static "imgs/login.jpg" %}');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .conMed {
+            width: 320px;
+            height: 60px;
+            margin: 5% auto;
+            line-height: 60px;
+        }
+
+        .conMed input {
+            float: right;
+            height: 36px;
+            width: 200px;
+            margin-top: 12px;
+        }
+        .conMed label {
+        float: left;
+        }
+
+        form {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            text-align: center;
+            padding-top: 5%;
+            display: block;
+        }
+
+        #verifyCode {
+            float: left;
+            width: 35%;
+            height: 100%;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+
+
+    </style>
+    <script src="{% static 'js/tools.js' %}"></script>
+
+    <script>
+
+        window.onload = function () {
+            {% comment %}点击更新验证码{% endcomment %}
+            var verifyCodeOut = document.getElementById('verifyCode');
+
+            function updateVerifyCode() {
+                let date = new Date();
+                let timestamp = date.getTime();//http://10.181.211.109:8000/imgcode/
+                verifyCodeOut.innerHTML = `<img src="{% url 'aaa:imgcode' %}/${timestamp}" style="width:100%;height:100%;">`;
+            }
+
+            verifyCodeOut.onclick = function () {
+                updateVerifyCode();
+            }
+
+            {% comment %}点击提交表单{% endcomment %}
+            var inputList = document.getElementsByTagName('input');
+            var tipsList = document.getElementsByClassName('tips');
+            var account = inputList[0];
+            var password = inputList[1];
+            var confirmPassword = inputList[2];
+            var verifyCode = inputList[3];
+            var accountTip = tipsList[0];
+            var passwordTip = tipsList[1];
+            var confirmPasswordTip = tipsList[2];
+            var accountOk = 0;
+            var passwordOk = 0;
+            var confirmPasswordOk = 0;
+
+            {% comment %}判断账号的格式是否满足{% endcomment %}
+            account.onblur = function () {
+                accountValue = account.value;
+                if (accountValue.length < 6 || accountValue.length > 11) {
+                    accountTip.innerHTML = `<span class="glyphicon glyphicon-remove" style="color:red;"></span>`;
+                    accountOk = 0;
+                } else {
+                    accountTip.innerHTML = `<span class="glyphicon glyphicon-ok" style="color:green;display: inline-block;  "></span> `;
+                    accountOk = 1;
+                }
+            }
+
+            {% comment %}判断密码的格式是否满足{% endcomment %}
+
+            function passwordOnblur() {
+                passwordValue = password.value;
+                if (!/[a-zA-Z]/.test(passwordValue) || !/[0-9]/.test(passwordValue)) {
+                    passwordTip.innerHTML = `<span class="glyphicon glyphicon-remove" style="color:red;"></span>`;
+                    passwordOk = 0;
+                } else {
+                    passwordTip.innerHTML = `<span class="glyphicon glyphicon-ok" style="color:green;display: inline-block;  "></span> `;
+                    passwordOk = 1;
+                }
+            }
+
+            password.onblur = function () {
+                passwordOnblur();
+                confirmPasswordOnblur();
+            }
+
+            {% comment %}确认密码{% endcomment %}
+
+            function confirmPasswordOnblur() {
+                passwordValue = password.value;
+                confirmPasswordValue = confirmPassword.value;
+                if (passwordValue !== confirmPasswordValue || confirmPasswordValue.length<6 || !/[a-zA-Z]/.test(confirmPasswordValue) || !/[0-9]/.test(confirmPasswordValue)) {
+                    confirmPasswordTip.innerHTML = `<span class="glyphicon glyphicon-remove" style="color:red;"></span>`;
+                    confirmPasswordOk = 0;
+                } else {
+                    confirmPasswordTip.innerHTML = `<span class="glyphicon glyphicon-ok" style="color:green;display: inline-block;  "></span> `;
+                    confirmPasswordOk = 1;
+                }
+            }
+
+            confirmPassword.onblur = function () {
+                confirmPasswordOnblur();
+            }
+
+            var button = document.getElementById('submit');
+
+            function buttonClick() {
+                if (!accountOk || !passwordOk || !confirmPasswordOk) {
+                    alert('请检查表单!');
+                } else {
+                    $ajax('post', ' {% url "aaa:register" %}', {
+                            'account': account.value,
+                            'password': password.value,
+                            'confirmPassword': confirmPassword.value,
+                            'verifyCode': verifyCode.value
+                        },
+                        function (msg) {
+                            let data = JSON.parse(msg)['msg'];
+                            alert(data);
+                        },
+                        function (msg) {
+                            let data = JSON.parse(msg)['msg'];
+
+                            alert('失败' + data);
+                        },
+                    )
+
+
+                }
+                updateVerifyCode();
+
+            }
+
+            {% comment %}为按钮添加点击事件{% endcomment %}
+            button.addEventListener('click', buttonClick, false);
+
+
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+<div class="container">
+
+
+    <div id="con">
+
+        <div id="con-le"></div>
+        <div id="con-ri">
+            <form action="#" class="form-group form-inline" method="post">
+                {% comment %}{% csrf_token %}{% endcomment %}
+                <h3 style="margin: 0;border-bottom:1px solid gray">创建账号!</h3>
+
+
+                <div class="conMed"><label for="">账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号:</label>
+                    <input type="text" value="" class="form-control" name="account" placeholder="6~11位字符">
+                    <div style="float:right;width:15%;height:100%;" class="tips"></div>
+
+                </div>
+                <div class="conMed"><label for="">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+                    <input type="password" value="" class="form-control" name="password" placeholder="至少包含数字和字母">
+                    <div style="float:right;width:15%;height:100%;" class="tips"></div>
+
+                </div>
+
+                <div class="conMed"><label for="">确认密码:</label>
+                    <input type="password" value="" class="form-control" name="confirmPassword" placeholder="同上输入保持一致">
+                    <div style="float:right;width:15%;height:100%;" class="tips"></div>
+
+                </div>
+                <div class="conMed">
+                    <div id="verifyCode"><img src="{% url 'aaa:imgcode' %}" style="width:100%;height:100%;"></div>
+                    <input class="form-control" type="text" placeholder="请输入验证码" id="verifyInput" name="verifyCode">
+                </div>
+                <div class="conMed">
+                    <div type="submit" class="button btn-info" id="submit" style="font-size:18px;">注&nbsp;册</div>
+
+                </div>
+                <hr>
+                <hr>
+                <div class="conMed">
+                    <a href="{% url 'aaa:login' %}">已有账号!登录!</a>
+                </div>
+
+
+            </form>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

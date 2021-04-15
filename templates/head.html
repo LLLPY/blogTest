@@ -1,0 +1,351 @@
+{% load static %}
+<style>
+    #head, #content, #footer {
+        width: 100%;
+
+    }
+
+    {% comment %}头部样式{% endcomment %}
+
+    #head {
+        height: 200px;
+        border-bottom: 1px solid gray;
+        background-color: #e0eaff;
+    }
+
+    #head-le, #head-mid, #head-ri {
+        float: left;
+    }
+
+    #head-le {
+        width: 25%;
+    {% comment %}360px{% endcomment %} height: 100%;
+    {% comment %}200px{% endcomment %} text-align: center;
+        font-size: 50px;
+
+    }
+
+    #head-le-bottom, #head-le-top {
+        width: 100%;
+    {% comment %}360px{% endcomment %} height: 50%;
+    {% comment %}100px{% endcomment %} float: left;
+        line-height: 50px;
+    }
+
+    #head-le-top {
+        line-height: 160px;
+        border-bottom: 5px solid green;
+
+    }
+
+    #head-le-bottom span:first-child {
+        text-shadow: 1px 1px 1px #000, -1px -1px 1px #fff; /*凸起的文字*/
+        color: rgb(33, 212, 134);
+    }
+
+    #head-le-bottom strong {
+        text-shadow: -1px -1px 1px #000, 1px 1px 1px #fff; /*凹陷的文字*/
+        color: #3b7ca7;
+    }
+
+    #head-le-bottom i {
+        color: #ffb22f;
+    }
+
+    #head-mid {
+        width: 60%;
+        height: 100%;
+    }
+
+    #head-mid-top form {
+        padding: 0;
+        width: 30%;
+        height: 40%;
+        border: 1px solid black;
+        border-radius: 15px;
+        overflow: hidden;
+        float: right;
+        margin-right: 120px;
+        margin-top: 15px;
+        box-sizing: border-box;
+        background-color: black;
+        position: relative;
+
+
+    }
+
+    #head-mid-top form input:first-child {
+        width: 70%;
+        height: 100%;
+        border: none;
+        box-sizing: border-box;
+        border-radius: 0;
+
+    }
+
+    #head-mid-top form input:last-child {
+        width: 29%;
+        height: 100%;
+        border: none;
+        background-color: #fff;
+        float: right;
+        position: absolute;
+        right: 0;
+        top: 0;
+        box-sizing: border-box;
+        border-radius: 0;
+    }
+
+
+    #head-mid-bottom ul {
+        width: 100%;
+        height: 100%;
+    }
+
+    #head-mid-bottom ul li {
+        float: left;
+        width: 20%;
+        height: 100%;
+        text-align: center;
+        line-height: 100px;
+        transition: all .5s linear;
+    }
+
+    #head-mid-bottom ul li:hover {
+        background-color: #fff;
+        font-size: 15px;
+    }
+
+    #head-ri {
+        width: 15%;
+        height: 100%;
+    }
+
+
+    #head-le-top, #head-mid-top, #head-ri-top {
+        border-bottom: 5px solid green;
+        width: 100%;
+        height: 50%;
+        float: left;
+
+    }
+
+    #head-le-bottom, #head-mid-bottom, #head-ri-bottom {
+
+        width: 100%;
+        height: 50%;
+        float: left;
+
+    }
+
+    #head-ri-bottom {
+        text-align: center;
+        padding-top: 20px;
+        width: 100%;
+        height: 99.5px;
+
+
+    }
+
+    #avatar {
+        position: relative;
+        display: block;
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        background-color: #fff;
+        left: 100px;
+        top: 10px;
+
+    }
+
+    #avatar img {
+        position: absolute;
+        width: 110%;
+        height: 110%;
+        border: 2px solid gray;
+        left: -2px;
+        top: -2px;
+
+    }
+
+    #blockAvatar {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        background-color: rgba(0, 0, 0, .4);
+        font-size: 10px;
+        line-height: 50px;
+        font-weight: 600;
+    }
+
+
+</style>
+<script>
+    window.onload = function () {
+
+        {% comment %}判断用户是否登录{% endcomment %}
+        var username = getCookie('username');
+        var headRiBottom = document.getElementById('head-ri-bottom');
+        if (!username) {
+            headRiBottom.innerHTML = `<a href="{% url 'aaa:login' %}"><span class="iconfont" style="font-size:20px;">&#xe62a;请先登录</span></a>`;
+        } else {
+            headRiBottom.innerHTML = `<a id="avatar" href="{% url 'home:home' %}" class="img-circle">
+                <img  src="{% static ''%}{{ avatar }}"><span id="blockAvatar">个人中心</span></a>`;
+        }
+
+
+        var keyword = document.getElementById('keyword');
+        var spanNextInput = document.getElementById('spanNextInput');
+        var tipSpan = document.getElementById('tipSpan');
+
+        spanNextInput.onmousemove = function () {
+            tipSpan.innerHTML = '来打我呀!??';
+        }
+        spanNextInput.onmouseout = function () {
+            tipSpan.innerHTML = '';
+        }
+
+        {% comment %}输入框聚焦时宽度变长{% endcomment %}
+        keyword.onfocus = function () {
+            let formTag = keyword.parentNode;
+            perfectMove(formTag, {
+                width: 512,
+            }, function () {
+                let spanNextInput = document.getElementById('spanNextInput');
+                spanNextInput.style.color = 'green';
+                tipSpan.style.display = 'inline';
+                tipSpan.style.position = 'absolute';
+                tipSpan.innerHTML = '你撞到我头了!';
+            })
+        }
+
+        keyword.onblur = function () {
+            let formTag = keyword.parentNode;
+            perfectMove(formTag, {
+                width: 200,
+            }, function () {
+                let spanNextInput = document.getElementById('spanNextInput');
+                spanNextInput.style.color = 'skyblue';
+                tipSpan.innerHTML = '下次小心一点!!!';
+                setTimeout(function () {
+                    tipSpan.innerHTML = '';
+                }, 1000);
+
+            })
+        }
+
+        {% comment %}经过头像显示个人中心{% endcomment %}
+        var blockAvatar = document.getElementById('blockAvatar');
+        blockAvatar.style.display = 'none';
+        var avatar = document.getElementById('avatar');
+        avatar.onmousemove = function () {
+            blockAvatar.style.display = 'block';
+
+        }
+        avatar.onmouseleave = function () {
+            blockAvatar.style.display = 'none';
+        }
+
+
+        {% comment %}写博客界面{% endcomment %}
+        //选择标签
+        var tagsFrame = document.getElementById('tagsFrame');
+        var spanList = tagsFrame.getElementsByTagName('span');
+        tagsFrame.onclick = function (ev) {
+            var e = ev || window.event;
+            var target = e.target || window.event.srcElement; //找到目标对象
+
+            if (target.nodeName.toLowerCase() === 'span' && target.className === 'noSeleected') {
+                target.className = 'seleected';
+            } else if (target.nodeName.toLowerCase() === 'span' && target.className === 'seleected') {
+                target.className = 'noSeleected';
+            } else if (target.nodeName.toLowerCase()==='label') {
+            } else if(target.className){
+               let newTag= prompt('请输入要添加的标签名:');
+                let newSpan=document.createElement('span');
+                newSpan.className = 'seleected';
+                newSpan.innerHTML=newTag;
+                tagsFrame.appendChild(newSpan);
+
+
+            }
+
+
+        }
+
+
+    }
+</script>
+<div id="head">
+    <div id="head-le">
+
+        <div id="head-le-top">
+            <svg style="font-size:40px;color:#3b7ca7;" class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gouxiao"></use>
+            </svg>
+            <span class="iconfont" style="font-size:50px;color:skyblue;width:50px;height:50px;text-align: right">&#xe616;</span>
+            <svg style="font-size:40px;color:#3b7ca7;" class="icon" aria-hidden="true">
+                <use xlink:href="#icon-yepian"></use>
+            </svg>
+            <svg style="font-size:100px;" class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gouwo"></use>
+            </svg>
+
+        </div>
+
+        <div id="head-le-bottom">
+            <span>狗</span>
+            <strong>狗</strong>
+            <svg style="font-size:30px;" class="icon" aria-hidden="true">
+                <use xlink:href="#icon-gou12"></use>
+            </svg>
+            <i><u>部落</u></i>
+        </div>
+
+    </div>
+
+    <div id="head-mid">
+        <div id="head-mid-top">
+            <span id="spanNextInput" class="iconfont" style="font-size:50px;color:skyblue;">&#xe60d;</span>
+
+            <span id="tipSpan"></span>
+            <form class="form-inline" action="#" target="_blank">
+                <input autocomplete="off" type="text" class="form-control" required="required" name="keyword"
+                       placeholder="Search" id="keyword">
+                <input type="submit" class="button" value="搜索">
+            </form>
+        </div>
+        <div id="head-mid-bottom">
+            <ul>
+                <li><a href="{% url 'home:index' %}"><span class="iconfont"
+                                                           style="font-size:30px;">&#xe60f;</span>大厅</a></li>
+                <li><a href="#"><span class="iconfont" style="font-size:30px;">&#xe737;</span>狗窝</a></li>
+                <li><a href="#"><span class="iconfont" style="font-size:30px;">&#xe60d;</span>狗狗大全</a></li>
+                <li><a href="#"><span class="iconfont" style="font-size:30px;">&#xe608;</span>狗狗护理</a></li>
+                <li><a href="{% url 'home:writeBlog' %}"><span class="iconfont" style="font-size:30px;">&#xe84a;</span>狗狗日记</a>
+                </li>
+            </ul>
+
+
+        </div>
+
+
+    </div>
+    <div id="head-ri">
+        <div id="head-ri-top">
+            <span class="iconfont" style="font-size:30px;color:skyblue;height:100px;">&#xe615;</span>
+            <span class="iconfont" style="font-size:30px;color:skyblue;height:100px;">&#xe60b;</span>
+            <span class="iconfont" style="font-size:15px;color:skyblue;height:100px;">&#xe612;</span>
+            <span class="iconfont" style="font-size:80px;color:skyblue;height:100px;">&#xe629;</span>
+        </div>
+        <div id="head-ri-bottom">
+
+
+        </div>
+
+    </div>
+</div>
+
+

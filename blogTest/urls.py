@@ -33,6 +33,8 @@ def log(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'app/',include(('app.urls','aaa'),namespace='aaa')),
-    url('',log),
+    # url(r'^app/',include(('app.urls','aaa'),namespace='aaa')),
+    url('',include(('app.urls','aaa'),namespace='aaa')),
+    url('',include(('home.urls','aaa'),namespace='home')),
+    # url('',log),
 ]

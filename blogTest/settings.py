@@ -36,13 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
+    'home',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -53,7 +55,7 @@ ROOT_URLCONF = 'blogTest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates')] #模板的路径
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -81,7 +83,7 @@ DATABASES = {
         "ENGINE": 'django.db.backends.mysql',
         "NAME": "blogtest",
         'HOST': '121.199.23.213',
-        'USER': 'blogTest',
+        'USER': 'blogtest',
         'PASSWORD': '123456',
         'PORT': 3306
     }
@@ -91,14 +93,14 @@ DATABASES = {
 CACHES = {
     'default': {  # 默认
         "BACKEND": 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.16379/0',
+        'LOCATION': 'redis://127.0.0.1:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     },
     'session': {  # session
         "BACKEND": 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.16379/1',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -196,4 +198,42 @@ LOGGING = {
         }
     }
 
+}
+
+#替换系统的User 来使用我们自己定义的User
+AUTH_USER_MODEL='app.User' #子应用名.模型类名
+
+
+#富文本的配置
+# 以字典形式配置富文本框架tinymce
+
+# 作用于管理后台中的富文本编辑器
+
+TINYMCE_DEFAULT_CONFIG = {
+
+  # 使用高级主题,备选项还有简单主题
+  'theme': 'advanced',
+  # 'theme': 'simple',
+
+  # 必须指定富文本编辑器(RTF=rich text format)的宽高
+  'width': 800,
+  'height': 600,
+
+  # 汉化
+  'language': 'zh',
+
+  # 自定义常用的固定样式
+  'style_formats': [
+    # title=样式名称
+    # styles=自定义css样式
+    # inline:xxx = 将加样式后的文本放在行内元素中显示
+    # block:xxx = 将加样式后的文本放在块级元素中显示
+    {'title': 'Bold text', 'inline': 'b'},
+    {'title': 'Red text', 'inline': 'span', 'styles': {'color': '#ff0000'}},
+    {'title': 'Red header', 'block': 'h1', 'styles': {'color': '#ff0000'}},
+    {'title': 'Example 1', 'inline': 'span', 'classes': 'example1'},
+    {'title': 'Example 2', 'inline': 'span', 'classes': 'example2'},
+    {'title': 'Table styles'},
+    {'title': 'Table row 1', 'selector': 'tr', 'classes': 'tablerow1'}
+  ],
 }
